@@ -1,6 +1,7 @@
 'use strict';
 const app = require( './app' );
-
+const models = require( './models' );
+const initData = require ('./lib/initData.js' );
 /* Start the server */
 const http = require( 'http' ).Server( app ); 
 
@@ -25,7 +26,14 @@ warnEnvVars( ['PORT', 'JWT_SECRET', 'SQLUSER', 'SQLPASS', 'SQLPORT', 'SQLDBNAME'
 process.env.JWT_SECRET  = process.env.JWT_SECRET || 'asf23r9sdf21';
 
 /* Set the port, default 3000 */ 
+
 app.set( 'port', process.env.PORT || 3000 );
-var server = http.listen( app.get( 'port' ), () => {
-  console.log( 'Express server listening on ' + server.address().port );
+  models.sequelize.sync({force:false}).then( () => {
+  var server = http.listen( app.get( 'port' ), () => {
+    initData( models );
+    console.log( 'Express server listening on ' + server.address().port );
+  });
+})
+.catch( ( error ) => {
+  console.error( error );
 });
