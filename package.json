@@ -1,0 +1,19 @@
+{
+  "name": "transpecos",
+  "version": "1.0.0",
+  "description": "RP website with chargen and dicerolling and other mechanics",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrMarkMaker/transpecos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrMarkMaker/transpecos/issues"
+  },
+  "homepage": "https://github.com/MrMarkMaker/transpecos#readme"
+}
