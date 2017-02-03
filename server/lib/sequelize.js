@@ -5,7 +5,7 @@ var Sequelize = require( 'sequelize' );
 var user = process.env.SQLUSER || 'root';
 var password = process.env.SQLPASS || null;
 var port = process.env.SQLPORT || 3306;
-var dbname = process.env.SQLDBNAME || 'geekmapper_test';
+var dbname = process.env.SQLDBNAME || 'transpecos';
 
 var sequelize = new Sequelize( dbname, user, password, {
   host: 'localhost',
