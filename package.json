@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/MrMarkMaker/transpecos/issues"
   },
-  "homepage": "https://github.com/MrMarkMaker/transpecos#readme"
+  "homepage": "https://github.com/MrMarkMaker/transpecos#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "express": "^4.14.1",
+    "mysql": "^2.13.0",
+    "sequelize": "^3.30.1"
+  }
 }
