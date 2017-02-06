@@ -54,32 +54,35 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _navbar = __webpack_require__(178);
+
+	var _navbar2 = _interopRequireDefault(_navbar);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var HelloWorld = _react2.default.createClass({
-	  displayName: "HelloWorld",
+	var navdata = [{
+	  key: 0,
+	  linktext: "test",
+	  url: "#test"
+	}, {
+	  key: 1,
+	  linktext: "test2",
+	  url: "#test1"
+	}, {
+	  key: 2,
+	  linktext: "submenu",
+	  url: "#test2",
+	  submenu: [{
+	    linktext: "boop",
+	    url: "#test3",
+	    submenu: [{ linktext: "kek", url: "#test4" }]
+	  }, {
+	    linktext: "beep",
+	    url: "#test5"
+	  }]
+	}];
 
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "p",
-	      null,
-	      "Hello, ",
-	      this.props.greetTarget,
-	      "!"
-	    );
-	  }
-	});
-
-	_reactDom2.default.render(_react2.default.createElement(
-	  "div",
-	  null,
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Batman" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Iron Man" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Nicolas Cage" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Mega Man" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Bono" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Catwoman" })
-	), document.querySelector("#container"));
+	_reactDom2.default.render(_react2.default.createElement(_navbar2.default, { items: navdata }), document.getElementById('navbar'));
 
 /***/ },
 /* 1 */
@@ -21514,6 +21517,127 @@
 
 	module.exports = ReactDOMInvalidARIAHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var NavLink = function (_React$Component) {
+	  _inherits(NavLink, _React$Component);
+
+	  function NavLink() {
+	    _classCallCheck(this, NavLink);
+
+	    return _possibleConstructorReturn(this, (NavLink.__proto__ || Object.getPrototypeOf(NavLink)).apply(this, arguments));
+	  }
+
+	  _createClass(NavLink, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'a',
+	        { href: this.props.url },
+	        this.props.linktext
+	      );
+	    }
+	  }]);
+
+	  return NavLink;
+	}(_react2.default.Component);
+
+	var NavItem = function (_React$Component2) {
+	  _inherits(NavItem, _React$Component2);
+
+	  function NavItem() {
+	    _classCallCheck(this, NavItem);
+
+	    return _possibleConstructorReturn(this, (NavItem.__proto__ || Object.getPrototypeOf(NavItem)).apply(this, arguments));
+	  }
+
+	  _createClass(NavItem, [{
+	    key: 'makeLink',
+	    value: function makeLink() {
+	      return _react2.default.createElement(NavLink, { url: this.props.url, linktext: this.props.linktext });
+	    }
+	  }, {
+	    key: 'makeSubMenu',
+	    value: function makeSubMenu() {
+	      return _react2.default.createElement(NavBar, { items: this.props.submenu });
+	    }
+	  }, {
+	    key: 'makeNavContent',
+	    value: function makeNavContent() {
+	      var content = [this.makeLink()];
+	      if (this.props.submenu) {
+	        content.push(this.makeSubMenu());
+	      }
+	      return content;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var content = this.makeNavContent();
+	      return _react2.default.createElement(
+	        'li',
+	        null,
+	        content
+	      );
+	    }
+	  }]);
+
+	  return NavItem;
+	}(_react2.default.Component);
+
+	var NavBar = function (_React$Component3) {
+	  _inherits(NavBar, _React$Component3);
+
+	  function NavBar() {
+	    _classCallCheck(this, NavBar);
+
+	    return _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).apply(this, arguments));
+	  }
+
+	  _createClass(NavBar, [{
+	    key: 'makeItem',
+	    value: function makeItem(item) {
+	      return _react2.default.createElement(NavItem, { linktext: item.linktext, url: item.url, submenu: item.submenu });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var items = this.props.items.map(this.makeItem);
+	      return _react2.default.createElement(
+	        'ul',
+	        null,
+	        items
+	      );
+	    }
+	  }]);
+
+	  return NavBar;
+	}(_react2.default.Component);
+
+	exports.default = NavBar;
 
 /***/ }
 /******/ ]);
