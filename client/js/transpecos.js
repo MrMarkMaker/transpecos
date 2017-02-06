@@ -61,14 +61,27 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var navdata = [{
+	  key: 0,
 	  name: "test",
 	  url: "#"
 	}, {
+	  key: 1,
 	  name: "test2",
 	  url: "#"
+	}, {
+	  key: 2,
+	  name: "submenu",
+	  url: "#",
+	  submenu: [{
+	    name: "boop",
+	    url: "#"
+	  }, {
+	    name: "beep",
+	    url: "#"
+	  }]
 	}];
 
-	_reactDom2.default.render(_react2.default.createElement(_navbar2.default, { linkdata: navdata }), document.getElementById('navbar'));
+	_reactDom2.default.render(_react2.default.createElement(_navbar2.default, { navdata: navdata }), document.getElementById('navbar'));
 
 /***/ },
 /* 1 */
@@ -21528,18 +21541,18 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Navbar = function (_React$Component) {
-	  _inherits(Navbar, _React$Component);
+	var SubMenu = function (_React$Component) {
+	  _inherits(SubMenu, _React$Component);
 
-	  function Navbar() {
-	    _classCallCheck(this, Navbar);
+	  function SubMenu() {
+	    _classCallCheck(this, SubMenu);
 
-	    return _possibleConstructorReturn(this, (Navbar.__proto__ || Object.getPrototypeOf(Navbar)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (SubMenu.__proto__ || Object.getPrototypeOf(SubMenu)).apply(this, arguments));
 	  }
 
-	  _createClass(Navbar, [{
-	    key: 'makeLink',
-	    value: function makeLink(linkdata) {
+	  _createClass(SubMenu, [{
+	    key: 'makeSublink',
+	    value: function makeSublink(linkdata) {
 	      return _react2.default.createElement(
 	        'li',
 	        null,
@@ -21553,7 +21566,61 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var links = this.props.linkdata.map(this.makeLink);
+	      var sublinks = this.props.linkdata.map(this.makeSublink);
+	      return _react2.default.createElement(
+	        'ul',
+	        null,
+	        sublinks
+	      );
+	    }
+	  }]);
+
+	  return SubMenu;
+	}(_react2.default.Component);
+
+	var Navbar = function (_React$Component2) {
+	  _inherits(Navbar, _React$Component2);
+
+	  function Navbar() {
+	    _classCallCheck(this, Navbar);
+
+	    return _possibleConstructorReturn(this, (Navbar.__proto__ || Object.getPrototypeOf(Navbar)).apply(this, arguments));
+	  }
+
+	  _createClass(Navbar, [{
+	    key: 'makeLink',
+	    value: function makeLink(linkdata) {
+	      if (linkdata.submenu) {
+	        return _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            'a',
+	            { href: linkdata.url },
+	            linkdata.name
+	          ),
+	          _react2.default.createElement(
+	            'ul',
+	            null,
+	            _react2.default.createElement(SubMenu, { linkdata: linkdata.submenu })
+	          )
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            'a',
+	            { href: linkdata.url },
+	            linkdata.name
+	          )
+	        );
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var links = this.props.navdata.map(this.makeLink);
 	      return _react2.default.createElement(
 	        'ul',
 	        null,
