@@ -9,6 +9,12 @@ var config = {
   output: {
     path: OUTPUT,
     filename: "transpecos.js"
+  },
+  module: {
+    loaders: [{
+        include: DEV,
+        loader: "babel",
+    }]
   }
 };
  
