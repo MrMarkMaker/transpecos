@@ -1,33 +1,34 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Navbar from "./navbar.jsx";
+import NavBar from "./navbar.jsx";
 
 var navdata = [
   {
     key: 0,
-    name: "test",
-    url: "#"
+    linktext: "test",
+    url: "#test"
   },
   {
     key: 1,
-    name: "test2",
-    url: "#"
+    linktext: "test2",
+    url: "#test1"
   },
   {
     key: 2,
-    name: "submenu",
-    url: "#",
+    linktext: "submenu",
+    url: "#test2",
     submenu: [
       {
-        name: "boop",
-        url: "#"
+        linktext: "boop",
+        url: "#test3",
+        submenu: [ {linktext: "kek", url: "#test4"} ]
       },
       {
-        name: "beep",
-        url: "#"
+        linktext: "beep",
+        url: "#test5"
       }
     ]
   }
 ]
 
-ReactDOM.render(<Navbar navdata={navdata} />, document.getElementById('navbar'));
+ReactDOM.render(<NavBar items={navdata} />, document.getElementById('navbar'));

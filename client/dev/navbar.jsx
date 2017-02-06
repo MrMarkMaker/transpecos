@@ -1,46 +1,53 @@
 import React from 'react';
 
-class SubMenu extends React.Component {
-  
-  makeSublink( linkdata ){
-    return ( <li><a href={linkdata.url}>{linkdata.name}</a></li> );
-  }
+class NavLink extends React.Component{
   render(){
-    var sublinks = this.props.linkdata.map(this.makeSublink);
+    return (
+      <a href={this.props.url}>{this.props.linktext}</a>
+    )
+  }
+}
+
+class NavItem extends React.Component {
+  makeLink(){
+    return <NavLink url={this.props.url} linktext={this.props.linktext} />;
+  }
+  
+  makeSubMenu(){
+    return <NavBar items={this.props.submenu} />;
+  }
+  
+  makeNavContent(){
+    var content = [this.makeLink()];
+    if(this.props.submenu){
+      content.push(this.makeSubMenu());
+    }
+    return content;
+  }
+  
+  render(){
+    var content = this.makeNavContent();
+    return (
+      <li>
+        {content}
+      </li>
+    );
+  }
+}
+
+class NavBar extends React.Component {
+  makeItem(item){
+    return ( <NavItem linktext={item.linktext} url={item.url} submenu={item.submenu} /> )
+  }
+  
+  render(){
+    var items = this.props.items.map(this.makeItem);
     return (
       <ul>
-      {sublinks}
+        {items}
       </ul>
     )
   }
 }
 
-class Navbar extends React.Component {
-  
-  makeLink( linkdata ){
-    if( linkdata.submenu ){
-      return(
-        <li><a href={linkdata.url}>{linkdata.name}</a>
-          <ul>
-            <SubMenu linkdata={linkdata.submenu} />
-          </ul>
-        </li>
-      )
-    } else {
-      return(
-        <li><a href={linkdata.url}>{linkdata.name}</a></li>
-      )
-    }
-  }
-  
-  render() {
-    var links = this.props.navdata.map(this.makeLink);
-    return (   
-       <ul>
-       {links}
-       </ul>
-    );
-  }
-}
-
-export default Navbar;
+export default NavBar;

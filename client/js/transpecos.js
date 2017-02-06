@@ -62,26 +62,27 @@
 
 	var navdata = [{
 	  key: 0,
-	  name: "test",
-	  url: "#"
+	  linktext: "test",
+	  url: "#test"
 	}, {
 	  key: 1,
-	  name: "test2",
-	  url: "#"
+	  linktext: "test2",
+	  url: "#test1"
 	}, {
 	  key: 2,
-	  name: "submenu",
-	  url: "#",
+	  linktext: "submenu",
+	  url: "#test2",
 	  submenu: [{
-	    name: "boop",
-	    url: "#"
+	    linktext: "boop",
+	    url: "#test3",
+	    submenu: [{ linktext: "kek", url: "#test4" }]
 	  }, {
-	    name: "beep",
-	    url: "#"
+	    linktext: "beep",
+	    url: "#test5"
 	  }]
 	}];
 
-	_reactDom2.default.render(_react2.default.createElement(_navbar2.default, { navdata: navdata }), document.getElementById('navbar'));
+	_reactDom2.default.render(_react2.default.createElement(_navbar2.default, { items: navdata }), document.getElementById('navbar'));
 
 /***/ },
 /* 1 */
@@ -21541,98 +21542,102 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var SubMenu = function (_React$Component) {
-	  _inherits(SubMenu, _React$Component);
+	var NavLink = function (_React$Component) {
+	  _inherits(NavLink, _React$Component);
 
-	  function SubMenu() {
-	    _classCallCheck(this, SubMenu);
+	  function NavLink() {
+	    _classCallCheck(this, NavLink);
 
-	    return _possibleConstructorReturn(this, (SubMenu.__proto__ || Object.getPrototypeOf(SubMenu)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (NavLink.__proto__ || Object.getPrototypeOf(NavLink)).apply(this, arguments));
 	  }
 
-	  _createClass(SubMenu, [{
-	    key: 'makeSublink',
-	    value: function makeSublink(linkdata) {
+	  _createClass(NavLink, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'a',
+	        { href: this.props.url },
+	        this.props.linktext
+	      );
+	    }
+	  }]);
+
+	  return NavLink;
+	}(_react2.default.Component);
+
+	var NavItem = function (_React$Component2) {
+	  _inherits(NavItem, _React$Component2);
+
+	  function NavItem() {
+	    _classCallCheck(this, NavItem);
+
+	    return _possibleConstructorReturn(this, (NavItem.__proto__ || Object.getPrototypeOf(NavItem)).apply(this, arguments));
+	  }
+
+	  _createClass(NavItem, [{
+	    key: 'makeLink',
+	    value: function makeLink() {
+	      return _react2.default.createElement(NavLink, { url: this.props.url, linktext: this.props.linktext });
+	    }
+	  }, {
+	    key: 'makeSubMenu',
+	    value: function makeSubMenu() {
+	      return _react2.default.createElement(NavBar, { items: this.props.submenu });
+	    }
+	  }, {
+	    key: 'makeNavContent',
+	    value: function makeNavContent() {
+	      var content = [this.makeLink()];
+	      if (this.props.submenu) {
+	        content.push(this.makeSubMenu());
+	      }
+	      return content;
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var content = this.makeNavContent();
 	      return _react2.default.createElement(
 	        'li',
 	        null,
-	        _react2.default.createElement(
-	          'a',
-	          { href: linkdata.url },
-	          linkdata.name
-	        )
-	      );
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var sublinks = this.props.linkdata.map(this.makeSublink);
-	      return _react2.default.createElement(
-	        'ul',
-	        null,
-	        sublinks
+	        content
 	      );
 	    }
 	  }]);
 
-	  return SubMenu;
+	  return NavItem;
 	}(_react2.default.Component);
 
-	var Navbar = function (_React$Component2) {
-	  _inherits(Navbar, _React$Component2);
+	var NavBar = function (_React$Component3) {
+	  _inherits(NavBar, _React$Component3);
 
-	  function Navbar() {
-	    _classCallCheck(this, Navbar);
+	  function NavBar() {
+	    _classCallCheck(this, NavBar);
 
-	    return _possibleConstructorReturn(this, (Navbar.__proto__ || Object.getPrototypeOf(Navbar)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).apply(this, arguments));
 	  }
 
-	  _createClass(Navbar, [{
-	    key: 'makeLink',
-	    value: function makeLink(linkdata) {
-	      if (linkdata.submenu) {
-	        return _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            'a',
-	            { href: linkdata.url },
-	            linkdata.name
-	          ),
-	          _react2.default.createElement(
-	            'ul',
-	            null,
-	            _react2.default.createElement(SubMenu, { linkdata: linkdata.submenu })
-	          )
-	        );
-	      } else {
-	        return _react2.default.createElement(
-	          'li',
-	          null,
-	          _react2.default.createElement(
-	            'a',
-	            { href: linkdata.url },
-	            linkdata.name
-	          )
-	        );
-	      }
+	  _createClass(NavBar, [{
+	    key: 'makeItem',
+	    value: function makeItem(item) {
+	      return _react2.default.createElement(NavItem, { linktext: item.linktext, url: item.url, submenu: item.submenu });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var links = this.props.navdata.map(this.makeLink);
+	      var items = this.props.items.map(this.makeItem);
 	      return _react2.default.createElement(
 	        'ul',
 	        null,
-	        links
+	        items
 	      );
 	    }
 	  }]);
 
-	  return Navbar;
+	  return NavBar;
 	}(_react2.default.Component);
 
-	exports.default = Navbar;
+	exports.default = NavBar;
 
 /***/ }
 /******/ ]);
