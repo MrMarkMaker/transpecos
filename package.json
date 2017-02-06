@@ -4,7 +4,7 @@
   "description": "RP website with chargen and dicerolling and other mechanics",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon server/index.js"
+    "start": "./node_modules/.bin/webpack | nodemon server/index.js" 
   },
   "repository": {
     "type": "git",
