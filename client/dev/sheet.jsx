@@ -36,6 +36,7 @@ Sheet.propTypes = {
         description: React.PropTypes.string,
         modifiers: React.PropTypes.object,
         score: React.PropTypes.number,
+        fraction: React.PropTypes.number,
         id: React.PropTypes.number.isRequired //used as key
       }
     )
@@ -278,32 +279,57 @@ For later: Reputation and Fame
 
 */
 
-function AbilitiesTable(props){
-  return(
-    <ul>
-      {props.data.map(function(ability){
-        return(
-          <li key={ability.id}>
-            <div>
-              {ability.name}
-            </div>
-            <StatCounter />
-          </li>
-        )
-      })}
-    </ul>
-  )
-}
+
+class AbilitiesTable extends React.Component { //Tryin' this out in ES6. I have ES6 right? 
+  constructor( props ){
+    super(props);
+  
+    //Initial state
+    this.state = {
+      data: props.data
+    }
+    
+    //Manually bind functions 
+    this.rollstats = this.rollstats.bind(this);
+  }
+      
+  rollstats(event){
+    //Produce a random number between 3 and 18 and set that as the number.
+    var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
+    var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
+    this.setState({
+      score: abilityscore,
+      fraction: fractionalscore
+    });
+  }
+  
+  render(){
+    return(
+      <ul>
+        {this.state.data.map(function(ability){
+          return(
+            <li key={ability.id}>
+              <div>
+                {ability.name}
+              </div>
+              <StatCounter />
+            </li>
+          )
+        })}
+      </ul>
+    )
+  }
+};
 
 AbilitiesTable.propTypes = {
-// Since these propTypes are described by Sheet too, I wonder if this isn't just needlessly redundant
-// But maybe as the app gets more complicado then this little chunk broken down will be useful
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape(
       {
         name: React.PropTypes.string.isRequired,
-        modifier: React.PropTypes.string,
+        description: React.PropTypes.string,
+        modifiers: React.PropTypes.object,
         score: React.PropTypes.number,
+        fraction: React.PropTypes.number,
         id: React.PropTypes.number.isRequired //used as key
       }
     )
@@ -343,20 +369,9 @@ var StatCounter = React.createClass({
     }
   },
   
-  roll3d6: function(){
-    //Produce a random number between 3 and 18 and set that as the number.
-    var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
-    var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
-    this.setState({
-      score: abilityscore,
-      fraction: fractionalscore
-    });
-  },
-  
   render: function(){
     return(
       <div>
-         <button onClick={this.roll3d6}>Roll</button>
         <button onClick={this.decreaseScore}> - </button>
         <span>{this.state.score}/{this.state.fraction}</span>
         <button onClick={this.increaseScore}> + </button>
