@@ -54,32 +54,13 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _sheet = __webpack_require__(178);
+
+	var _sheet2 = _interopRequireDefault(_sheet);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var HelloWorld = _react2.default.createClass({
-	  displayName: "HelloWorld",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "p",
-	      null,
-	      "Hello, ",
-	      this.props.greetTarget,
-	      "!"
-	    );
-	  }
-	});
-
-	_reactDom2.default.render(_react2.default.createElement(
-	  "div",
-	  null,
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Batman" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Iron Man" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Nicolas Cage" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Mega Man" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Bono" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Catwoman" })
-	), document.querySelector("#container"));
+	_reactDom2.default.render(_react2.default.createElement(_sheet2.default, null), document.getElementById('sheet'));
 
 /***/ },
 /* 1 */
@@ -21514,6 +21495,183 @@
 
 	module.exports = ReactDOMInvalidARIAHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function Sheet(props) {
+	  return _react2.default.createElement(AbilitiesTable, { data: props.abilities })
+	  //Later on we will also put in other statset components
+	  ;
+	} /* RIGHT NOW: 
+	    I r learn reacts, you can basically just nudge stats up and down between 1 and 25.
+	  
+	  END GOAL BEHAVIOR: 
+	    Interactivity: 
+	      Player chooses to roll for stats or manually assign stats
+	      If rolls: 
+	        Player rolls 3d6 for each ability score, and a d100 for fractional ability of each
+	      If assigns stats:
+	        Player assigns a pool of numbers to the scores they want
+	        (let's go with 16/18, 15/27, 13/45, 11/63, 10/72, 8/90, 8/90 )      
+	      
+	      In both cases, once these stats are set, +/- buttons show up so player can adjust their results
+	      Player will need to decrease one ability by 2 for each ability they have increased by 1.
+	  */
+
+	Sheet.propTypes = {
+	  abilities: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
+	    name: _react2.default.PropTypes.string.isRequired,
+	    modifier: _react2.default.PropTypes.string,
+	    score: _react2.default.PropTypes.number,
+	    id: _react2.default.PropTypes.number.isRequired //used as key
+	  }))
+	};
+
+	Sheet.defaultProps = {
+	  abilities: [{
+	    name: "Strength",
+	    modifier: "Damage",
+	    id: 1
+	  }, {
+	    name: "Intelligence",
+	    modifier: "Skill Learning",
+	    id: 2
+	  }, {
+	    name: "Wisdom",
+	    modifier: "Skill Learning",
+	    id: 3
+	  }, {
+	    name: "Dexterity",
+	    modifier: "To-Hit",
+	    id: 4
+	  }, {
+	    name: "Constitution",
+	    modifier: "Hit Point",
+	    id: 5
+	  }, {
+	    name: "Looks",
+	    modifier: "Rep/Fame",
+	    id: 6
+	  }, {
+	    name: "Charisma",
+	    modifier: "Skill Learning",
+	    id: 7
+	  }, {
+	    name: "Reputation",
+	    id: 8
+	    //No modifier
+	  }, {
+	    name: "Fame",
+	    id: 9
+	    //No modifier
+	  }]
+	};
+
+	function AbilitiesTable(props) {
+	  return _react2.default.createElement(
+	    "ul",
+	    null,
+	    props.data.map(function (ability) {
+	      return _react2.default.createElement(
+	        "li",
+	        { key: ability.id },
+	        _react2.default.createElement(
+	          "div",
+	          null,
+	          ability.name,
+	          ": ",
+	          ability.modifier
+	        ),
+	        _react2.default.createElement(StatCounter, null)
+	      );
+	    })
+	  );
+	}
+
+	AbilitiesTable.propTypes = {
+	  // Since these propTypes are described by Sheet too, I wonder if this isn't just needlessly redundant 
+	  // But maybe as the app gets more complicado then this little chunk broken down will be useful
+	  data: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
+	    name: _react2.default.PropTypes.string.isRequired,
+	    modifier: _react2.default.PropTypes.string,
+	    score: _react2.default.PropTypes.number,
+	    id: _react2.default.PropTypes.number.isRequired //used as key
+	  }))
+	};
+
+	var StatCounter = _react2.default.createClass({
+	  displayName: "StatCounter",
+
+	  propTypes: {
+	    score: _react2.default.PropTypes.number
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      score: 1
+	    };
+	  },
+
+	  increaseScore: function increaseScore() {
+	    //Maximum score is 25
+	    var tempscore = this.state.score + 1;
+	    if (tempscore < 26) {
+	      this.setState({
+	        score: this.state.score + 1
+	      });
+	    }
+	  },
+
+	  decreaseScore: function decreaseScore() {
+	    //Minimum score is 1 
+	    var tempscore = this.state.score - 1;
+	    if (tempscore > 1) {
+	      this.setState({
+	        score: this.state.score - 1
+	      });
+	    }
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "button",
+	        { onClick: this.decreaseScore },
+	        " - "
+	      ),
+	      _react2.default.createElement(
+	        "span",
+	        null,
+	        this.state.score
+	      ),
+	      _react2.default.createElement(
+	        "button",
+	        { onClick: this.increaseScore },
+	        " + "
+	      )
+	    )
+	    //Sweet mother of victory I will turn this into an input later when I remotely understand how the hell to do that
+	    ;
+	  }
+	});
+
+	exports.default = Sheet;
 
 /***/ }
 /******/ ]);
