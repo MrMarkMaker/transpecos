@@ -20,6 +20,7 @@ END GOAL BEHAVIOR:
     
 import React from "react";
 const vigilance = "takes its toll";
+import update from 'immutability-helper';
 
 function Sheet(props){
   return(
@@ -48,6 +49,8 @@ Sheet.defaultProps = {
   [
     {
       name: "Strength",
+      score: 0,
+      fraction: 0,
       description: "Determines how much damage you can deal in melee and brawling situations, plus how much you can lift and carry.",
       id: 1,
       modifiers: {
@@ -105,6 +108,8 @@ Sheet.defaultProps = {
     },
     {
       name: "Intelligence",
+      score: 0,
+      fraction: 0,
       id: 2,
       modifiers: {
         feature: ["Skill Learning"],
@@ -127,6 +132,8 @@ Sheet.defaultProps = {
     },
     {
       name: "Wisdom",
+      score: 0,
+      fraction: 0,
       id: 3,
       modifiers: {
         feature: ["Skill Learning"],
@@ -149,6 +156,8 @@ Sheet.defaultProps = {
     },
     {
       name: "Dexterity",
+      score: 0,
+      fraction: 0,
       id: 4,
       modifiers: {
         feature: ["To-Hit"],
@@ -197,6 +206,8 @@ Sheet.defaultProps = {
     },
     {
       name: "Constitution",
+      score: 0,
+      fraction: 0,
       modifiers: {
         feature: ["Hit Points"],
         fractional: false,
@@ -211,6 +222,8 @@ Sheet.defaultProps = {
     },
     {
       name: "Looks",
+      score: 0,
+      fraction: 0,
       modifiers: {
         feature: ["Fame", "Reputation"],
         fractional: false,
@@ -229,6 +242,8 @@ Sheet.defaultProps = {
     },
     {
       name: "Charisma",
+      score: 0,
+      fraction: 0,
       modifiers: {
         feature: ["Skill Learning"],
         fractional: false,
@@ -280,7 +295,7 @@ For later: Reputation and Fame
 */
 
 
-class AbilitiesTable extends React.Component { //Tryin' this out in ES6. I have ES6 right? 
+class AbilitiesTable extends React.Component { 
   constructor( props ){
     super(props);
   
@@ -294,17 +309,22 @@ class AbilitiesTable extends React.Component { //Tryin' this out in ES6. I have 
   }
       
   rollstats(event){
-    //Produce a random number between 3 and 18 and set that as the number.
-    var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
-    var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
+    var newData = this.state.data;
+    for( var i = 0; i < 7; i ++ ){
+      var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
+      var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
+      newData[i].score = abilityscore;
+      newData[i].fraction = fractionalscore;
+    }
     this.setState({
-      score: abilityscore,
-      fraction: fractionalscore
+      data: newData
     });
   }
   
   render(){
     return(
+    <div>
+      <button onClick={this.rollstats}>Roll</button>
       <ul>
         {this.state.data.map(function(ability){
           return(
@@ -312,11 +332,12 @@ class AbilitiesTable extends React.Component { //Tryin' this out in ES6. I have 
               <div>
                 {ability.name}
               </div>
-              <StatCounter />
+              <StatCounter score={ability.score} fraction={ability.fraction} />
             </li>
           )
         })}
       </ul>
+    </div>
     )
   }
 };
