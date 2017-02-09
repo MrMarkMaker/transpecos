@@ -312,12 +312,14 @@ AbilitiesTable.propTypes = {
 
 var StatCounter = React.createClass({
   propTypes: {
-    score: React.PropTypes.number
+    score: React.PropTypes.number,
+    fraction: React.PropTypes.number
   },
   
   getInitialState: function(){
     return{
-      score: 1      
+      score: 0,
+      fraction: 0      
     }
   },
   
@@ -341,11 +343,22 @@ var StatCounter = React.createClass({
     }
   },
   
+  roll3d6: function(){
+    //Produce a random number between 3 and 18 and set that as the number.
+    var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
+    var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
+    this.setState({
+      score: abilityscore,
+      fraction: fractionalscore
+    });
+  },
+  
   render: function(){
     return(
       <div>
+         <button onClick={this.roll3d6}>Roll</button>
         <button onClick={this.decreaseScore}> - </button>
-        <span>{this.state.score}</span>
+        <span>{this.state.score}/{this.state.fraction}</span>
         <button onClick={this.increaseScore}> + </button>
       </div>
       //Sweet mother of victory I will turn this into an input later when I remotely understand how the hell to do that
