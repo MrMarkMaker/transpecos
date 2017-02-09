@@ -20,8 +20,6 @@ END GOAL BEHAVIOR:
     
 import React from "react";
 const vigilance = "takes its toll";
-import update from 'immutability-helper';
-
 function Sheet(props){
   return(
     <AbilitiesTable data={props.abilities} />
@@ -332,7 +330,7 @@ class AbilitiesTable extends React.Component {
               <div>
                 {ability.name}
               </div>
-              <StatCounter score={ability.score} fraction={ability.fraction} />
+              {ability.score}/{ability.fraction}
             </li>
           )
         })}
@@ -357,49 +355,5 @@ AbilitiesTable.propTypes = {
   )
 }
 
-var StatCounter = React.createClass({
-  propTypes: {
-    score: React.PropTypes.number,
-    fraction: React.PropTypes.number
-  },
-  
-  getInitialState: function(){
-    return{
-      score: 0,
-      fraction: 0      
-    }
-  },
-  
-  increaseScore: function(){
-    //Maximum score is 25
-    var tempscore = this.state.score + 1;
-    if( tempscore < 26 ){
-      this.setState({
-        score: (this.state.score + 1)
-      })
-    }
-  },
-  
-  decreaseScore: function(){
-    //Minimum score is 1 
-    var tempscore = this.state.score - 1;
-    if( tempscore > 1 ){
-      this.setState({
-        score: (this.state.score - 1),
-      });
-    }
-  },
-  
-  render: function(){
-    return(
-      <div>
-        <button onClick={this.decreaseScore}> - </button>
-        <span>{this.state.score}/{this.state.fraction}</span>
-        <button onClick={this.increaseScore}> + </button>
-      </div>
-      //Sweet mother of victory I will turn this into an input later when I remotely understand how the hell to do that
-    )  
-  }
-});
 
 export default Sheet
