@@ -1,7 +1,5 @@
-/* RIGHT NOW: 
-  I r learn reacts, you can basically just nudge stats up and down between 1 and 25.
-
-END GOAL BEHAVIOR: 
+/*
+  END GOAL BEHAVIOR: 
   ABILITIES: 
   1. Player rolls 3d6 for each ability score, and a d100 for fractional ability of each
   2. Player makes adjustments from 3 modes: 
@@ -299,7 +297,8 @@ class AbilitiesTable extends React.Component {
   
     //Initial state
     this.state = {
-      data: props.data
+      data: props.data,
+      tries: 3
     }
     
     //Manually bind functions 
@@ -307,21 +306,27 @@ class AbilitiesTable extends React.Component {
   }
       
   rollstats(event){
-    var newData = this.state.data;
-    for( var i = 0; i < 7; i ++ ){
-      var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
-      var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
-      newData[i].score = abilityscore;
-      newData[i].fraction = fractionalscore;
+    if( this.state.tries > 0 ){ 
+      var newData = this.state.data;
+      for( var i = 0; i < 7; i ++ ){
+        var abilityscore = Math.floor(Math.random() * (18 - 3 ) + 3 );
+        var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
+        newData[i].score = abilityscore;
+        newData[i].fraction = fractionalscore;
+      }
+      this.setState({
+        data: newData,
+        tries: this.state.tries - 1
+      });
+    } else {
+      //Notify user that they ran out of tries.
     }
-    this.setState({
-      data: newData
-    });
   }
   
   render(){
     return(
     <div>
+      <p>{this.state.tries} Rolls Left</p>
       <button onClick={this.rollstats}>Roll</button>
       <ul>
         {this.state.data.map(function(ability){
@@ -341,6 +346,7 @@ class AbilitiesTable extends React.Component {
 };
 
 AbilitiesTable.propTypes = {
+  tries: React.PropTypes.number,
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape(
       {
