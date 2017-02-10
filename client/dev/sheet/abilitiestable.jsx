@@ -12,8 +12,35 @@ class AbilitiesTable extends React.Component {
     
     //Manually bind functions 
     this.rollstats = this.rollstats.bind(this);
+    this.confirmstats = this.confirmstats.bind(this);
   }
-      
+  
+  confirmstats(){
+    var newData = this.state.data; 
+    var abilitySum = 0;
+    var reputationScore = 0;
+    for( var i = 0; i < 7; i++ ){
+      abilitySum += parseInt( newData[i].score, 10 ); 
+    }
+    reputationScore = Math.floor( abilitySum / 7 ); 
+    //Create Starting Reputation. 
+    var reputation = {
+      name: "Reputation",
+      score: reputationScore,
+      fraction: 0,
+      id: 8,
+      modifier: {
+        name: "BP Bonus",
+        score: 0
+      }
+    };
+    newData.push( reputation );
+    console.log( newData );
+    this.setState({
+      data: newData
+    });
+  }
+
   rollstats(event){
     if( this.state.tries > 0 ){ 
       var newData = this.state.data;
@@ -22,7 +49,8 @@ class AbilitiesTable extends React.Component {
         var fractionalscore = Math.floor(Math.random() * (100 - 1 ) + 1 );
         newData[i].score = abilityscore;
         newData[i].fraction = fractionalscore;
-        // TO DO: Set modifiers     
+        // TO DO: Set modifiers
+        
       }
       this.setState({
         data: newData,
@@ -30,10 +58,12 @@ class AbilitiesTable extends React.Component {
       });
     } else {
       //TO DO: Notify user that they ran out of tries.
+      this.confirmstats(); //Later confirmstats will be triggered when u decide to save your preferred result of 3 but at this point we're goinna go for it
     }
   }
   
   render(){
+    console.log( "Rendering" );
     return(
     <div>
       <p>{this.state.tries} Rolls Left</p>
