@@ -21510,33 +21510,51 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _abilities = __webpack_require__(179);
+
+	var _abilities2 = _interopRequireDefault(_abilities);
+
+	var _abilitiestable = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./sheet/abilitiestable.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _abilitiestable2 = _interopRequireDefault(_abilitiestable);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var vigilance = "takes its toll"; /*
+	                                    END GOAL BEHAVIOR: 
+	                                    ABILITIES: 
+	                                    
+	                                    1. Player rolls 3d6 for each ability score, and a d100 for fractional ability of each - Check :D 
+	                                    
+	                                    2. Player makes adjustments from 3 modes: 
+	                                      A. Ability Point Trading 
+	                                      Sacrifice X points from Ability A to increase Ability B by Y points.  The amount you need to sacrifice depends on the score to be improved, see p 24 of players' guide 
+	                                      
+	                                      B. Building Point Generating
+	                                      Sacrifice points from ability scores to generate additional building points.  It's a flat rate of getting 7 BP per ability score. 
+	                                  
+	                                      C. Spend Building Points 
+	                                      Sacrifice X Building Points (before you can use them on skills) to increase Ability Y by 1 point at a time; cost of BP depends on score to be improved, see p 25.
+	                                    3. Character's Starting Reputation is calculated by averaging the seven abilities and then having the Rep Modifiers from said abilities added
+	                                    
+	                                    4. Character's Starting Fame is calculated by adding the Fame modifiers from the Abilities.
+	                                    
+	                                    5. Once this is set, a button will appear that indicates the next step of chargen is unlocked
+	                                  */
+
 	function Sheet(props) {
-	  return _react2.default.createElement(AbilitiesTable, { data: props.abilities })
+	  return _react2.default.createElement(_abilitiestable2.default, { data: props.abilities })
 	  //Later on we will also put in other statset components
 	  ;
-	} /* RIGHT NOW: 
-	    I r learn reacts, you can basically just nudge stats up and down between 1 and 25.
-	  
-	  END GOAL BEHAVIOR: 
-	    Interactivity: 
-	      Player chooses to roll for stats or manually assign stats
-	      If rolls: 
-	        Player rolls 3d6 for each ability score, and a d100 for fractional ability of each
-	      If assigns stats:
-	        Player assigns a pool of numbers to the scores they want
-	        (let's go with 16/18, 15/27, 13/45, 11/63, 10/72, 8/90, 8/90 )      
-	      
-	      In both cases, once these stats are set, +/- buttons show up so player can adjust their results
-	      Player will need to decrease one ability by 2 for each ability they have increased by 1.
-	  */
+	}
 
 	Sheet.propTypes = {
 	  abilities: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
 	    name: _react2.default.PropTypes.string.isRequired,
-	    modifier: _react2.default.PropTypes.string,
+	    description: _react2.default.PropTypes.string,
+	    modifiers: _react2.default.PropTypes.object,
 	    score: _react2.default.PropTypes.number,
+	    fraction: _react2.default.PropTypes.number,
 	    id: _react2.default.PropTypes.number.isRequired //used as key
 	  }))
 	};
@@ -21544,134 +21562,238 @@
 	Sheet.defaultProps = {
 	  abilities: [{
 	    name: "Strength",
-	    modifier: "Damage",
-	    id: 1
+	    score: 0,
+	    fraction: 0,
+	    id: 1,
+	    modifier: {
+	      name: "Damage",
+	      score: 0
+	    }
 	  }, {
 	    name: "Intelligence",
-	    modifier: "Skill Learning",
-	    id: 2
+	    score: 0,
+	    fraction: 0,
+	    id: 2,
+	    modifier: {
+	      name: "Skill Learning",
+	      score: 0
+	    }
 	  }, {
 	    name: "Wisdom",
-	    modifier: "Skill Learning",
-	    id: 3
+	    score: 0,
+	    fraction: 0,
+	    id: 3,
+	    modifier: {
+	      name: "Skill Learning",
+	      score: 0
+	    }
 	  }, {
 	    name: "Dexterity",
-	    modifier: "To-Hit",
-	    id: 4
+	    score: 0,
+	    fraction: 0,
+	    id: 4,
+	    modifier: {
+	      name: "To-Hit",
+	      score: 0
+	    }
 	  }, {
 	    name: "Constitution",
-	    modifier: "Hit Point",
-	    id: 5
+	    score: 0,
+	    fraction: 0,
+	    id: 5,
+	    modifier: {
+	      name: "Hit Points",
+	      score: 0
+	    }
 	  }, {
 	    name: "Looks",
-	    modifier: "Rep/Fame",
+	    score: 0,
+	    fraction: 0,
+	    modifier: {
+	      name: "Fame/Reputation",
+	      score: 0
+	    },
 	    id: 6
 	  }, {
 	    name: "Charisma",
-	    modifier: "Skill Learning",
+	    score: 0,
+	    fraction: 0,
+	    modifier: {
+	      name: "Skill Learning",
+	      score: 0
+	    },
 	    id: 7
-	  }, {
-	    name: "Reputation",
-	    id: 8
-	    //No modifier
-	  }, {
-	    name: "Fame",
-	    id: 9
-	    //No modifier
 	  }]
 	};
 
-	function AbilitiesTable(props) {
-	  return _react2.default.createElement(
-	    "ul",
-	    null,
-	    props.data.map(function (ability) {
-	      return _react2.default.createElement(
-	        "li",
-	        { key: ability.id },
-	        _react2.default.createElement(
-	          "div",
-	          null,
-	          ability.name,
-	          ": ",
-	          ability.modifier
-	        ),
-	        _react2.default.createElement(StatCounter, null)
-	      );
-	    })
-	  );
-	}
-
-	AbilitiesTable.propTypes = {
-	  // Since these propTypes are described by Sheet too, I wonder if this isn't just needlessly redundant 
-	  // But maybe as the app gets more complicado then this little chunk broken down will be useful
-	  data: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
-	    name: _react2.default.PropTypes.string.isRequired,
-	    modifier: _react2.default.PropTypes.string,
-	    score: _react2.default.PropTypes.number,
-	    id: _react2.default.PropTypes.number.isRequired //used as key
-	  }))
-	};
-
-	var StatCounter = _react2.default.createClass({
-	  displayName: "StatCounter",
-
-	  propTypes: {
-	    score: _react2.default.PropTypes.number
-	  },
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      score: 1
-	    };
-	  },
-
-	  increaseScore: function increaseScore() {
-	    //Maximum score is 25
-	    var tempscore = this.state.score + 1;
-	    if (tempscore < 26) {
-	      this.setState({
-	        score: this.state.score + 1
-	      });
-	    }
-	  },
-
-	  decreaseScore: function decreaseScore() {
-	    //Minimum score is 1 
-	    var tempscore = this.state.score - 1;
-	    if (tempscore > 1) {
-	      this.setState({
-	        score: this.state.score - 1
-	      });
-	    }
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      null,
-	      _react2.default.createElement(
-	        "button",
-	        { onClick: this.decreaseScore },
-	        " - "
-	      ),
-	      _react2.default.createElement(
-	        "span",
-	        null,
-	        this.state.score
-	      ),
-	      _react2.default.createElement(
-	        "button",
-	        { onClick: this.increaseScore },
-	        " + "
-	      )
-	    )
-	    //Sweet mother of victory I will turn this into an input later when I remotely understand how the hell to do that
-	    ;
-	  }
-	});
-
 	exports.default = Sheet;
+
+/***/ },
+/* 179 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var AbilityDefs = [{
+	  name: "Strength",
+	  description: "Determines how much damage you can deal in melee and brawling situations, plus how much you can lift and carry.",
+	  id: 1,
+	  modifiers: {
+	    fractional: true, // for later code to do an if else.  Fractional = true means your modifier depends on your Ability Score + whether your Fractional Ability Score > 50 
+	    statsets: [//Modifiers are responsible for modifying more than one thing hence the array 
+	    {
+	      name: "Damage",
+	      feature: true, //Search for the attribute table's feature modifier by finding the one which is marked feature: true 
+	      values: [// Because the modifier is fractional we have an array of arrays: [A, B] where A is if your Fractional is < 50 and B is if > 50. 
+	      [-7, -6], //ability score of 1
+	      [-6, -5], //ability score of 2
+	      [-5, -4], //ability score of 3...
+	      [-4, -4], //4
+	      [-3, -3], //5
+	      [-3, -2], //6
+	      [-2, -2], //7
+	      [-1, -1], //8
+	      [-1, -1], //9
+	      [0, 0], //10
+	      [0, 0], [1, 1], [1, 1], [2, 2], [2, 3], //15
+	      [3, 3], [4, 4], [4, 5], [5, 6], [6, 7], //20
+	      [7, 8], [8, 9], [10, 11], [12, 13], [14, 14] //25
+	      ]
+	    }, {
+	      name: "Lift",
+	      values: [] //aint nobody
+	    }, {
+	      name: "Carry",
+	      values: [] //got time
+	    }, {
+	      name: "Drag",
+	      values: [] //fo dat 
+	    }]
+	  }
+	}, {
+	  name: "Intelligence",
+	  id: 2,
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Accuracy",
+	      values: [-3, -3, -3, -2, -2, -2, -1, -1, -1, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5] //These are not fractional, yay. 
+	    }, {
+	      name: "BP Bonus",
+	      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105]
+	    }, {
+	      name: "Skill Learning",
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+	      feature: true
+	    }]
+	  }
+	}, {
+	  name: "Wisdom",
+	  id: 3,
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Speed",
+	      values: [5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 1, 1, 1, 0, 0, 0, -1, -1, -1, -2, -2, -2, -3]
+	    }, {
+	      name: "BP Bonus",
+	      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105]
+	    }, {
+	      name: "Skill Learning",
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+	      feature: true
+	    }]
+	  }
+	}, {
+	  name: "Dexterity",
+	  id: 4,
+	  modifiers: {
+	    fractional: true,
+	    statsets: [{
+	      name: "Speed",
+	      values: [] //Fill out later
+	    }, {
+	      name: "Accuracy",
+	      values: [] //Fill out later, spoiler alert: it's the same as to-hit despite that these are two different stats
+	    }, {
+	      name: "To-Hit", //Yeah apparently accuracy and to-hit are two different things
+	      feature: true,
+	      values: [[-5, -4], [-4, -4], [-4, -3], [-3, -3], [-3, -2], //5
+	      [-2, -2], [-2, -1], [-1, -1], [-1, 0], [0, 0], //10
+	      [0, 0], [1, 1], [1, 1], [2, 2], [2, 2], //15
+	      [3, 3], [3, 3], [4, 4], [4, 4], [5, 5], //20
+	      [5, 5], [6, 6], [7, 7], //Oh come on hackmasters why cant it just be not fractional
+	      [7, 7], [7, 7] //25
+	      ]
+	    }]
+	  }
+	}, {
+	  name: "Constitution",
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Hit Points",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }]
+	  },
+	  id: 5
+	}, {
+	  name: "Looks",
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Fame",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }, {
+	      name: "Reputation",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	    }]
+	  },
+	  id: 6
+	}, {
+	  name: "Charisma",
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Skill Learning",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }, {
+	      name: "Reputation",
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }, {
+	      name: "BP Bonus",
+	      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105]
+	    }, {
+	      name: "Compatriots", //How many NPCs you can have, it's like a Retainers/Allies/Contacts score all in one
+	      values: [] //Fill out later
+	    }]
+	  },
+	  id: 7
+	}, {
+	  name: "Reputation",
+	  id: 8,
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "BP Bonus",
+	      feature: true,
+	      values: [0, 0, 0, 0, 0, 5, 10, 15, 20, 25, 25, 25, 30, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]
+	    }]
+	  }
+	}, {
+	  name: "Fame",
+	  id: 9
+	  //No modifier
+	}];
+
+	exports.default = AbilityDefs;
 
 /***/ }
 /******/ ]);
