@@ -35,9 +35,24 @@ class AbilitiesTable extends React.Component {
       }
     };
     newData.push( reputation );
+    
+    //TODO: Figure out how to calculate modifiers because that's how Fame is done and it needs doing
+    var fame = {
+      name: "Fame",
+      score: 0,
+      fraction: 0,
+      id: 9,
+      modifier:{
+        name: null,
+        score: null
+      }
+    }
+    newData.push( fame );
+    
     console.log( newData );
     this.setState({
-      data: newData
+      data: newData,
+      tries: 0
     });
   }
 
@@ -58,7 +73,7 @@ class AbilitiesTable extends React.Component {
       });
     } else {
       //TO DO: Notify user that they ran out of tries.
-      this.confirmstats(); //Later confirmstats will be triggered when u decide to save your preferred result of 3 but at this point we're goinna go for it
+      this.confirmstats();
     }
   }
   
@@ -68,6 +83,7 @@ class AbilitiesTable extends React.Component {
     <div>
       <p>{this.state.tries} Rolls Left</p>
       <button onClick={this.rollstats}>Roll</button>
+      <button onClick={this.confirmstats}>Keep These Stats</button>
       <ul>
         {this.state.data.map(function(ability){
           return(
