@@ -54,32 +54,13 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
+	var _sheet = __webpack_require__(178);
+
+	var _sheet2 = _interopRequireDefault(_sheet);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var HelloWorld = _react2.default.createClass({
-	  displayName: "HelloWorld",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "p",
-	      null,
-	      "Hello, ",
-	      this.props.greetTarget,
-	      "!"
-	    );
-	  }
-	});
-
-	_reactDom2.default.render(_react2.default.createElement(
-	  "div",
-	  null,
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Batman" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Iron Man" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Nicolas Cage" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Mega Man" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Bono" }),
-	  _react2.default.createElement(HelloWorld, { greetTarget: "Catwoman" })
-	), document.querySelector("#container"));
+	_reactDom2.default.render(_react2.default.createElement(_sheet2.default, null), document.getElementById('sheet'));
 
 /***/ },
 /* 1 */
@@ -21514,6 +21495,305 @@
 
 	module.exports = ReactDOMInvalidARIAHook;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 178 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _abilities = __webpack_require__(179);
+
+	var _abilities2 = _interopRequireDefault(_abilities);
+
+	var _abilitiestable = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./sheet/abilitiestable.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _abilitiestable2 = _interopRequireDefault(_abilitiestable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var vigilance = "takes its toll"; /*
+	                                    END GOAL BEHAVIOR: 
+	                                    ABILITIES: 
+	                                    
+	                                    1. Player rolls 3d6 for each ability score, and a d100 for fractional ability of each - Check :D 
+	                                    
+	                                    2. Player makes adjustments from 3 modes: 
+	                                      A. Ability Point Trading 
+	                                      Sacrifice X points from Ability A to increase Ability B by Y points.  The amount you need to sacrifice depends on the score to be improved, see p 24 of players' guide 
+	                                      
+	                                      B. Building Point Generating
+	                                      Sacrifice points from ability scores to generate additional building points.  It's a flat rate of getting 7 BP per ability score. 
+	                                  
+	                                      C. Spend Building Points 
+	                                      Sacrifice X Building Points (before you can use them on skills) to increase Ability Y by 1 point at a time; cost of BP depends on score to be improved, see p 25.
+	                                    3. Character's Starting Reputation is calculated by averaging the seven abilities and then having the Rep Modifiers from said abilities added
+	                                    
+	                                    4. Character's Starting Fame is calculated by adding the Fame modifiers from the Abilities.
+	                                    
+	                                    5. Once this is set, a button will appear that indicates the next step of chargen is unlocked
+	                                  */
+
+	function Sheet(props) {
+	  return _react2.default.createElement(_abilitiestable2.default, { data: props.abilities })
+	  //Later on we will also put in other statset components
+	  ;
+	}
+
+	Sheet.propTypes = {
+	  abilities: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.shape({
+	    name: _react2.default.PropTypes.string.isRequired,
+	    description: _react2.default.PropTypes.string,
+	    modifiers: _react2.default.PropTypes.object,
+	    score: _react2.default.PropTypes.number,
+	    fraction: _react2.default.PropTypes.number,
+	    id: _react2.default.PropTypes.number.isRequired //used as key
+	  }))
+	};
+
+	Sheet.defaultProps = {
+	  abilities: [{
+	    name: "Strength",
+	    score: 0,
+	    fraction: 0,
+	    id: 1,
+	    modifier: {
+	      name: "Damage",
+	      score: 0
+	    }
+	  }, {
+	    name: "Intelligence",
+	    score: 0,
+	    fraction: 0,
+	    id: 2,
+	    modifier: {
+	      name: "Skill Learning",
+	      score: 0
+	    }
+	  }, {
+	    name: "Wisdom",
+	    score: 0,
+	    fraction: 0,
+	    id: 3,
+	    modifier: {
+	      name: "Skill Learning",
+	      score: 0
+	    }
+	  }, {
+	    name: "Dexterity",
+	    score: 0,
+	    fraction: 0,
+	    id: 4,
+	    modifier: {
+	      name: "To-Hit",
+	      score: 0
+	    }
+	  }, {
+	    name: "Constitution",
+	    score: 0,
+	    fraction: 0,
+	    id: 5,
+	    modifier: {
+	      name: "Hit Points",
+	      score: 0
+	    }
+	  }, {
+	    name: "Looks",
+	    score: 0,
+	    fraction: 0,
+	    modifier: {
+	      name: "Fame/Reputation",
+	      score: 0
+	    },
+	    id: 6
+	  }, {
+	    name: "Charisma",
+	    score: 0,
+	    fraction: 0,
+	    modifier: {
+	      name: "Skill Learning",
+	      score: 0
+	    },
+	    id: 7
+	  }]
+	};
+
+	exports.default = Sheet;
+
+/***/ },
+/* 179 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var AbilityDefs = [{
+	  name: "Strength",
+	  description: "Determines how much damage you can deal in melee and brawling situations, plus how much you can lift and carry.",
+	  id: 1,
+	  modifiers: {
+	    fractional: true, // for later code to do an if else.  Fractional = true means your modifier depends on your Ability Score + whether your Fractional Ability Score > 50 
+	    statsets: [//Modifiers are responsible for modifying more than one thing hence the array 
+	    {
+	      name: "Damage",
+	      feature: true, //Search for the attribute table's feature modifier by finding the one which is marked feature: true 
+	      values: [// Because the modifier is fractional we have an array of arrays: [A, B] where A is if your Fractional is < 50 and B is if > 50. 
+	      [-7, -6], //ability score of 1
+	      [-6, -5], //ability score of 2
+	      [-5, -4], //ability score of 3...
+	      [-4, -4], //4
+	      [-3, -3], //5
+	      [-3, -2], //6
+	      [-2, -2], //7
+	      [-1, -1], //8
+	      [-1, -1], //9
+	      [0, 0], //10
+	      [0, 0], [1, 1], [1, 1], [2, 2], [2, 3], //15
+	      [3, 3], [4, 4], [4, 5], [5, 6], [6, 7], //20
+	      [7, 8], [8, 9], [10, 11], [12, 13], [14, 14] //25
+	      ]
+	    }, {
+	      name: "Lift",
+	      values: [] //aint nobody
+	    }, {
+	      name: "Carry",
+	      values: [] //got time
+	    }, {
+	      name: "Drag",
+	      values: [] //fo dat 
+	    }]
+	  }
+	}, {
+	  name: "Intelligence",
+	  id: 2,
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Accuracy",
+	      values: [-3, -3, -3, -2, -2, -2, -1, -1, -1, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5] //These are not fractional, yay. 
+	    }, {
+	      name: "BP Bonus",
+	      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105]
+	    }, {
+	      name: "Skill Learning",
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+	      feature: true
+	    }]
+	  }
+	}, {
+	  name: "Wisdom",
+	  id: 3,
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Speed",
+	      values: [5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 1, 1, 1, 0, 0, 0, -1, -1, -1, -2, -2, -2, -3]
+	    }, {
+	      name: "BP Bonus",
+	      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105]
+	    }, {
+	      name: "Skill Learning",
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+	      feature: true
+	    }]
+	  }
+	}, {
+	  name: "Dexterity",
+	  id: 4,
+	  modifiers: {
+	    fractional: true,
+	    statsets: [{
+	      name: "Speed",
+	      values: [] //Fill out later
+	    }, {
+	      name: "Accuracy",
+	      values: [] //Fill out later, spoiler alert: it's the same as to-hit despite that these are two different stats
+	    }, {
+	      name: "To-Hit", //Yeah apparently accuracy and to-hit are two different things
+	      feature: true,
+	      values: [[-5, -4], [-4, -4], [-4, -3], [-3, -3], [-3, -2], //5
+	      [-2, -2], [-2, -1], [-1, -1], [-1, 0], [0, 0], //10
+	      [0, 0], [1, 1], [1, 1], [2, 2], [2, 2], //15
+	      [3, 3], [3, 3], [4, 4], [4, 4], [5, 5], //20
+	      [5, 5], [6, 6], [7, 7], //Oh come on hackmasters why cant it just be not fractional
+	      [7, 7], [7, 7] //25
+	      ]
+	    }]
+	  }
+	}, {
+	  name: "Constitution",
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Hit Points",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }]
+	  },
+	  id: 5
+	}, {
+	  name: "Looks",
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Fame",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }, {
+	      name: "Reputation",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 1, 2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+	    }]
+	  },
+	  id: 6
+	}, {
+	  name: "Charisma",
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "Skill Learning",
+	      feature: true,
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }, {
+	      name: "Reputation",
+	      values: [-9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+	    }, {
+	      name: "BP Bonus",
+	      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105]
+	    }, {
+	      name: "Compatriots", //How many NPCs you can have, it's like a Retainers/Allies/Contacts score all in one
+	      values: [] //Fill out later
+	    }]
+	  },
+	  id: 7
+	}, {
+	  name: "Reputation",
+	  id: 8,
+	  modifiers: {
+	    fractional: false,
+	    statsets: [{
+	      name: "BP Bonus",
+	      feature: true,
+	      values: [0, 0, 0, 0, 0, 5, 10, 15, 20, 25, 25, 25, 30, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85]
+	    }]
+	  }
+	}, {
+	  name: "Fame",
+	  id: 9
+	  //No modifier
+	}];
+
+	exports.default = AbilityDefs;
 
 /***/ }
 /******/ ]);
