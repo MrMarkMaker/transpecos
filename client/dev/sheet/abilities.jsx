@@ -2,16 +2,23 @@ import React from "react";
 
 function AbilityScore(props){
   return( 
-    <div>
-      {props.name}
-      
-      {props.score}
-      <div className="btn-group-vertical btn-group-sm">
-        <span className="btn btn-default" onClick={function() {props.onScoreChange(+1);}}>+</span>
-        <span className="btn btn-default" onClick={function() {props.onScoreChange(-1);}}>-</span>
-      </div>
-    </div>
-
+    <tr>
+      <td>
+        {props.name}
+      </td>
+      <td>{props.score}
+        <div className="btn-group-vertical btn-group-sm">
+          <span className="btn btn-default" onClick={function() {props.onScoreChange(+1);}}>+</span>
+          <span className="btn btn-default" onClick={function() {props.onScoreChange(-1);}}>-</span>
+        </div>
+      </td>
+      <td>
+        {props.fraction}
+      </td>
+      <td>
+        {props.modifier}
+      </td>
+    </tr>
   )
 }
 
