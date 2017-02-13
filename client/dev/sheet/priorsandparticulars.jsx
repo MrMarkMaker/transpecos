@@ -1,6 +1,6 @@
 import React from "react";
 
-function SheetPriorsAndParticulars(){
+function SheetPriorsAndParticulars(props){
   return(
     <div className="panel panel-default">
       <div className="panel-heading">Priors And Particulars</div>
