@@ -1,13 +1,15 @@
 import React from "react";
 import AbilityScore from "./abilities.jsx";
-import SheetPriorsAndParticulars from "./priorsandparticulars.jsx"; 
+import Quirks from "./priorsandparticulars.jsx";
+
+var nextQuirksId = 1;
 
 var Sheet = React.createClass({
   /* Set Properties */
   propTypes: {
     character: React.PropTypes.shape({
       abilities: React.PropTypes.array,
-      priors: React.PropTypes.array
+      quirks: React.PropTypes.array
     })
   },
   
@@ -26,9 +28,45 @@ var Sheet = React.createClass({
             score: 1,
             fraction: 0,
             id: 2            
-          }
+          },
+          {
+            name: "Wisdom",
+            score: 1,
+            fraction: 0,
+            id: 3
+          },
+          {
+            name: "Dexterity",
+            score: 1,
+            fraction: 0,
+            id: 4
+          },
+          {
+            name: "Constitution",
+            score: 1,
+            fraction: 0,
+            id: 5
+          },
+          {
+            name: "Looks",
+            score: 1,
+            fraction: 0,
+            id: 6
+          },
+          {
+            name: "Charisma",
+            score: 1,
+            fraction: 0,
+            id: 7
+          },
+          
         ],
-        priors: []
+        quirks: [
+        { 
+          name: "Test",
+          id: 0
+        }
+        ]
       }
     }
   },
@@ -51,6 +89,20 @@ var Sheet = React.createClass({
     }
   },
   
+  onQuirkAdd: function( name ){
+    this.state.character.stats.quirks.push({
+        name: name,
+        id: nextQuirksId,
+      });
+      this.setState(this.state);
+      nextQuirksId += 1;
+  },
+  
+  onQuirkDelete: function( index ){
+    this.state.character.stats.quirks.splice(index, 1);
+    this.setState(this.state);
+  },
+
   /* Render */
   render: function(){
     return(
@@ -72,7 +124,11 @@ var Sheet = React.createClass({
                 {this.state.character.stats.abilities.map(function( stat, index ) {
                   return (
                     <AbilityScore
-                      onScoreChange={function(delta) {this.onScoreChange(index ,delta)}.bind(this)}
+                      onScoreChange={
+                        function(delta) {
+                          this.onScoreChange(index, delta)
+                        }.bind(this)
+                      }
                       name={stat.name} 
                       score={stat.score} 
                       fraction={stat.fraction}
@@ -83,10 +139,20 @@ var Sheet = React.createClass({
               </table>
             </div>
           </div>
-        </div>
-        <div className="col-sm-6 col-md-8">
-          <SheetPriorsAndParticulars />
-        </div>
+        </div>        
+        <Quirks 
+          data={this.state.character.stats.quirks}
+          onQuirkAdd={
+            function( name ){
+              this.onQuirkAdd( name )
+              }.bind(this)
+          }
+          onQuirkDelete={
+            function( index ){ 
+              this.onQuirkDelete( index )
+            }.bind( this )
+          }
+        />
       </div>
     )
   }
